@@ -33,3 +33,9 @@
 
 BuildFiles/
 Output/
+
+# Cross-compilation artifacts
+build-cross/
+.xwin-cache/
+toolchain.cmake
+build.log
