@@ -95,7 +95,7 @@ CMAKE_ARGS=(
 )
 
 # Add proxy path if specified (default: dwmapi.dll)
-if [ -n "$UE4SS_PROXY_PATH" ]; then
+if [ -n "${UE4SS_PROXY_PATH:-}" ]; then
     echo "Using custom proxy path: $UE4SS_PROXY_PATH"
     CMAKE_ARGS+=(-DUE4SS_PROXY_PATH="$UE4SS_PROXY_PATH")
 fi
