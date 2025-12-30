@@ -1,0 +1,35 @@
+name: Build with Nix
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Setup cross-compilation toolchain
+        run: nix run
+
+      - name: Build
+        run: nix run .#build -- -j$(nproc)
+
+      - name: List build artifacts
+        run: |
+          echo "Build completed. Artifacts:"
+          find build-cross -name "*.dll" -o -name "*.lib" 2>/dev/null | head -20 || echo "Build in progress..."
