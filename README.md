@@ -60,6 +60,15 @@ BUILD_TYPE=Game__Dev__Win64 nix run
 # - Game__Test__Win64
 ```
 
+## Proxy DLL
+
+Default proxy is `dwmapi.dll`. To use a different proxy DLL:
+
+```bash
+# Use version.dll instead
+UE4SS_PROXY_PATH="C:\Windows\System32\version.dll" nix run
+```
+
 ## Output
 
 Built mods are located in `build-cross/Game__Shipping__Win64/` after compilation.

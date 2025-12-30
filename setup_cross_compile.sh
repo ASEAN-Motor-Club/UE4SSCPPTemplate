@@ -85,9 +85,21 @@ echo "Toolchain created at toolchain.cmake"
 # 4. Run CMake
 BUILD_TYPE="${BUILD_TYPE:-Game__Shipping__Win64}"
 echo "Running CMake with build type: $BUILD_TYPE"
-cmake -B build-cross -G Ninja \
-    -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake \
-    -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
-    .
+
+# Build CMake args
+CMAKE_ARGS=(
+    -B build-cross
+    -G Ninja
+    -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake
+    -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+)
+
+# Add proxy path if specified (default: dwmapi.dll)
+if [ -n "$UE4SS_PROXY_PATH" ]; then
+    echo "Using custom proxy path: $UE4SS_PROXY_PATH"
+    CMAKE_ARGS+=(-DUE4SS_PROXY_PATH="$UE4SS_PROXY_PATH")
+fi
+
+cmake "${CMAKE_ARGS[@]}" .
 
 echo "Build configuration done. Run 'cmake --build build-cross' to compile."
