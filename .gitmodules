@@ -1,5 +1,5 @@
 [submodule "RE-UE4SS"]
 	path = RE-UE4SS
 	url = git@github.com:ASEAN-Motor-Club/RE-UE4SS.git
-	branch = main 
+	branch = nix-cross-compile
 	ignore = dirty
