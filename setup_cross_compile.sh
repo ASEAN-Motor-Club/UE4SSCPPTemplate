@@ -83,10 +83,11 @@ EOF
 echo "Toolchain created at toolchain.cmake"
 
 # 4. Run CMake
-echo "Running CMake..."
+BUILD_TYPE="${BUILD_TYPE:-Game__Shipping__Win64}"
+echo "Running CMake with build type: $BUILD_TYPE"
 cmake -B build-cross -G Ninja \
     -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake \
-    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
     .
 
 echo "Build configuration done. Run 'cmake --build build-cross' to compile."

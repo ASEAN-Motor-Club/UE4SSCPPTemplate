@@ -45,6 +45,21 @@ nix develop
 cmake --build build-cross
 ```
 
+## Build Types
+
+Default build type is `Game__Shipping__Win64`. To use a different build type:
+
+```bash
+# Set build type before running setup
+BUILD_TYPE=Game__Dev__Win64 nix run
+
+# Available build types:
+# - Game__Debug__Win64
+# - Game__Dev__Win64
+# - Game__Shipping__Win64 (default)
+# - Game__Test__Win64
+```
+
 ## Output
 
-Built mods are located in `build-cross/` after compilation.
+Built mods are located in `build-cross/Game__Shipping__Win64/` after compilation.
