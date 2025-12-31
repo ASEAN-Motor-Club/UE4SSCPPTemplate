@@ -169,7 +169,7 @@ if(NOT UE4SS_SOURCE_DIR)
     set(UE4SS_SOURCE_DIR "$UE4SS_SOURCE_DIR")
 endif()
 add_subdirectory("\''${UE4SS_SOURCE_DIR}" RE-UE4SS)
-add_subdirectory("${modDir}" ${modName})
+add_subdirectory("src" ${modName})
 EOF
                 
                 # Run setup script (downloads MSVC headers via xwin)
