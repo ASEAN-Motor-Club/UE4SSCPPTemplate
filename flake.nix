@@ -84,7 +84,7 @@
         packages.ue4ss-patched = patchedUE4SS;
 
         packages.default = pkgs.writeShellApplication {
-          name = "setup-cross-compile";
+          name = "configure-cross-compile";
           runtimeInputs = crossCompileBuildInputs;
           text = ''
             # Setup environment variables
@@ -96,7 +96,7 @@
         };
 
         # Alias for explicit naming
-        packages.setup = self.packages.${system}.default;
+        packages.configure = self.packages.${system}.default;
 
         packages.build = pkgs.writeShellApplication {
           name = "build-cross";
@@ -114,7 +114,7 @@
           drv = self.packages.${system}.default;
         };
 
-        apps.setup = self.apps.${system}.default;
+        apps.configure = self.apps.${system}.default;
 
         apps.build = flake-utils.lib.mkApp {
           drv = self.packages.${system}.build;
@@ -144,14 +144,13 @@
           
           # Create a cross-compiled mod build script (impure - requires network for xwin)
           # Usage: nix run .#build or call the script directly
-          mkBuildScript = {
-            modDir ? ./.,                                    # Path to mod source (CMake project)
+          mkConfigureScript = {
             modName ? "Mod",                                 # Name of the mod
             buildType ? "Game__Shipping__Win64",             # CMake build type
             proxyPath ? "C:\\Windows\\System32\\dwmapi.dll", # Proxy DLL path
           }:
             pkgs.writeShellApplication {
-              name = "${modName}-build";
+              name = "${modName}-configure";
               runtimeInputs = crossCompileBuildInputs;
               text = ''
                 # Setup environment
@@ -159,9 +158,7 @@
                 export BUILD_TYPE="${buildType}"
                 export UE4SS_PROXY_PATH="${proxyPath}"
                 
-                # We need to wrap the user's mod with a top-level CMakeLists.txt that includes UE4SS.
-                # The user's mod source is at ${modDir}, which will be copied/symlinked as a subdirectory.
-                
+                # Create CMakeLists.txt wrapper
                 cat > CMakeLists.txt <<EOF
 cmake_minimum_required(VERSION 3.22)
 project(UE4SSWrapper)
@@ -172,8 +169,26 @@ add_subdirectory("\''${UE4SS_SOURCE_DIR}" RE-UE4SS)
 add_subdirectory("src" ${modName})
 EOF
                 
-                # Run setup script (downloads MSVC headers via xwin)
+                # Run setup script (downloads MSVC headers via xwin and runs cmake -B)
                 ${builtins.readFile ./setup_cross_compile.sh}
+              '';
+            };
+
+          mkBuildScript = {
+            modName ? "Mod",                                 # Name of the mod
+            buildType ? "Game__Shipping__Win64",             # Only used for logging here
+          }:
+            pkgs.writeShellApplication {
+              name = "${modName}-build";
+              runtimeInputs = crossCompileBuildInputs;
+              text = ''
+                # Setup environment
+                ${crossCompileEnv}
+                
+                if [ ! -d "build-cross" ]; then
+                  echo "Error: build-cross directory not found. Please run 'nix run .#configure' first."
+                  exit 1
+                fi
                 
                 # Build
                 # Determine CPU count (compatible with Linux nproc and macOS sysctl)

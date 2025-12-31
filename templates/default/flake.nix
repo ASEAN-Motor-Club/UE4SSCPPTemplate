@@ -19,11 +19,18 @@
           # Development shell with all cross-compile tools
           devShells.default = lib.mkDevShell {};
 
+          # Configure script (run with `nix run .#configure`)
+          apps.configure = {
+                         type = "app";
+                         program = "${lib.mkConfigureScript {
+                           modName = "MyMod";
+                         }}/bin/MyMod-configure";
+                       };
+
           # Build script (run with `nix run`)
           apps.default = {
             type = "app";
             program = "${lib.mkBuildScript {
-              modDir = ./src;
               modName = "MyMod";
             }}/bin/MyMod-build";
           };
