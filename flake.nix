@@ -176,7 +176,9 @@ EOF
                 ${builtins.readFile ./setup_cross_compile.sh}
                 
                 # Build
-                cmake --build build-cross -j"''${NIX_BUILD_CORES:-$(nproc)}" "$@"
+                # Determine CPU count (compatible with Linux nproc and macOS sysctl)
+                CORES=$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+                cmake --build build-cross -j"''${NIX_BUILD_CORES:-$CORES}" "$@"
                 
                 echo "Build complete. Output in build-cross/${buildType}/"
               '';
