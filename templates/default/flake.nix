@@ -1,0 +1,32 @@
+{
+  description = "UE4SS C++ Mod - Created from template";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    ue4ss-cross.url = "github:ASEAN-Motor-Club/UE4SSCPPTemplate";
+  };
+
+  outputs = inputs@{ flake-parts, ue4ss-cross, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+
+      perSystem = { system, ... }:
+        let
+          lib = ue4ss-cross.lib.${system};
+        in
+        {
+          # Development shell with all cross-compile tools
+          devShells.default = lib.mkDevShell {};
+
+          # Build script (run with `nix run`)
+          apps.default = {
+            type = "app";
+            program = "${lib.mkBuildScript {
+              modDir = ./src;
+              modName = "MyMod";
+            }}/bin/MyMod-build";
+          };
+        };
+    };
+}

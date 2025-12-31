@@ -59,7 +59,8 @@
       "inputs": {
         "fenix": "fenix",
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "ue4ss": "ue4ss"
       }
     },
     "rust-analyzer-src": {
@@ -92,6 +93,24 @@
         "owner": "nix-systems",
         "repo": "default",
         "type": "github"
+      }
+    },
+    "ue4ss": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1766960770,
+        "narHash": "sha256-KoL/Q1ttocQnqOwqDFis1Olr5FXSnuxE8P+3gi1B6aw=",
+        "ref": "refs/heads/main",
+        "rev": "3e2d111681690a8a6a4837dda1dfa87a3ff6f823",
+        "revCount": 1827,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/UE4SS-RE/RE-UE4SS.git"
+      },
+      "original": {
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/UE4SS-RE/RE-UE4SS.git"
       }
     }
   },

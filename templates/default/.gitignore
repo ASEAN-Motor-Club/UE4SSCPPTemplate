@@ -1,0 +1,18 @@
+# Build outputs
+build-cross/
+build/
+
+# Nix
+result
+.direnv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

@@ -46,3 +46,6 @@ build.log
 # direnv
 .direnv/
 .envrc
+
+# Nix
+result

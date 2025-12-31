@@ -100,6 +100,12 @@ if [ -n "${UE4SS_PROXY_PATH:-}" ]; then
     CMAKE_ARGS+=(-DUE4SS_PROXY_PATH="$UE4SS_PROXY_PATH")
 fi
 
+# Add UE4SS source dir if specified (for Nix flake input)
+if [ -n "${UE4SS_SOURCE_DIR:-}" ]; then
+    echo "Using UE4SS source from: $UE4SS_SOURCE_DIR"
+    CMAKE_ARGS+=(-DUE4SS_SOURCE_DIR="$UE4SS_SOURCE_DIR")
+fi
+
 cmake "${CMAKE_ARGS[@]}" .
 
 echo "Build configuration done. Run 'cmake --build build-cross' to compile."
