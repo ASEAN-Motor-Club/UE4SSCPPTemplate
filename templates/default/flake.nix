@@ -27,13 +27,24 @@
                          }}/bin/MyMod-configure";
                        };
 
-          # Build script (run with `nix run`)
-          apps.default = {
+          # Build script (run with `nix run .#build`)
+          apps.build = {
             type = "app";
             program = "${lib.mkBuildScript {
               modName = "MyMod";
             }}/bin/MyMod-build";
           };
+
+          # Package script (run with `nix run .#package`)
+          apps.package = {
+            type = "app";
+            program = "${lib.mkPackageScript {
+              modName = "MyMod";
+            }}/bin/MyMod-package";
+          };
+
+          # Default to build
+          apps.default = apps.build;
         };
     };
 }

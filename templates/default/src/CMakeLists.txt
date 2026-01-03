@@ -12,6 +12,10 @@ add_library(MyMod SHARED ${SRC_FILES} ${HDR_FILES})
 target_link_libraries(MyMod PRIVATE UE4SS)
 
 # Include directories
+if(NOT DEFINED UE4SS_SOURCE_DIR AND DEFINED ENV{UE4SS_SOURCE_DIR})
+    set(UE4SS_SOURCE_DIR $ENV{UE4SS_SOURCE_DIR})
+endif()
+
 target_include_directories(MyMod PRIVATE 
     ${UE4SS_SOURCE_DIR}/UE4SS/include
     ${UE4SS_SOURCE_DIR}/deps/first/Unreal/include
